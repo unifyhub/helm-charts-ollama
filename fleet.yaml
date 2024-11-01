@@ -1,0 +1,38 @@
+namespace: ollama
+
+namespaceLabels:
+  project: unifyhub
+  environment: dev
+
+namespaceAnnotations:
+  owner: devops-team
+
+helm:
+  chart: .
+  releaseName: ollama
+  values:
+    ingress:
+      enabled: true
+      class: "traefik"
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+      host: "ollama.cpc.unifyhub.dev"
+      tls: false
+    ollama:
+     gpu:
+       enabled: true
+       type: 'nvidia'
+       nvidiaResource: "nvidia.com/gpu"
+       number: 1
+     runtimeClassName: "nvidia"
+     models:
+       - llama3
+    nodeSelector:
+      nvidia.com/gpu.product: "NVIDIA-RTX-6000-Ada-Generation"
+    persistentVolume:
+     enabled: true
+     size: "400Gi"
+
+rolloutStrategy:
+  maxUnavailable: 10%
+  autoPartitionSize: 20%
