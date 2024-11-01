@@ -16,7 +16,11 @@ helm:
       class: "traefik"
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-      host: "ollama.cpc.unifyhub.dev"
+      hosts:
+        - host: "ollama.cpc.unifyhub.dev"
+          paths:
+            - path: /
+              pathType: Prefix
       tls: false
     ollama:
      gpu:
